@@ -1,3 +1,4 @@
+
 "use strict";
 
 const { sequelize } = require("../models");
@@ -16,10 +17,14 @@ module.exports = {
      * Example:
      * await queryInterface.createTable('users', { id: Sequelize.INTEGER });
      */
-    await queryInterface.addColumn("Users", "lastName", {
-      type: Sequelize.STRING,
-      allowNull: false,
-    });
+    await queryInterface.addColumn(
+      { tableName: "Users", schema: options.schema }, // Use schema if needed
+      "lastName", // Column name
+      {
+        type: Sequelize.STRING,
+        allowNull: false,
+      }
+    );
   },
 
   async down(queryInterface, Sequelize) {
@@ -29,8 +34,11 @@ module.exports = {
      * Example:
      * await queryInterface.dropTable('users');
      */
-    options.tableName = "Users";
+  
 
-    await queryInterface.removeColumn({ tableName: "Users", schema: options.schema }, "lastName");
+    await queryInterface.removeColumn(
+      { tableName: "Users", schema: options.schema }, // Use schema if needed
+      "lastName" // Column name
+    );
   },
 };
