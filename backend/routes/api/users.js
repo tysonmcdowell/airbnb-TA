@@ -7,7 +7,7 @@ const { User } = require('../../db/models');
 const { check } = require('express-validator');
 const { handleValidationErrors } = require('../../utils/validation');
 
-const router = express.Router();
+// const router = express.Router();
 
 // backend/routes/api/users.js
 // ...
@@ -31,30 +31,32 @@ const validateSignup = [
   handleValidationErrors
 ];
 
-// Sign up
-router.post(
-  '/',
-  validateSignup,
-  async (req, res) => {
-    const { firstName, lastName ,email, password, username } = req.body;
-    const hashedPassword = bcrypt.hashSync(password);
-    const user = await User.create({ email, username, hashedPassword });
+const express = require('express');
+const { User } = require('../models');
+const router = express.Router();
 
-    const safeUser = {
-      id: user.id,
-      firstName: user.firstName,
-      lastName: user.lastName,
-      email: user.email,
-      username: user.username,
-    };
-
-    await setTokenCookie(res, safeUser);
-
-    return res.json({
-      user: safeUser
-    });
+router.post('/', async (req, res) => {
+  try {
+    const { username, email, password } = req.body;
+    const newUser = await User.create({ username, email, password });
+    return res.status(201).json(newUser);
+  } catch (error) {
+    return res.status(400).json({ error: 'Error creating user' });
   }
-);
+});
+
+router.get('/:userId', async (req, res) => {
+  try {
+    const user = await User.findByPk(req.params.userId);
+    if (!user) return res.status(404).json({ error: 'User not found' });
+    return res.json(user);
+  } catch (error) {
+    return res.status(400).json({ error: 'Error fetching user details' });
+  }
+});
+
+module.exports = router;
+
 
 
 

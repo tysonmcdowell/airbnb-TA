@@ -96,3 +96,6 @@ app.use((err, req, res, next) => {
 });
 
   module.exports = app;
+
+//   const port = 8000;
+// app.listen(port, () => console.log('Server is listening on port', port));
