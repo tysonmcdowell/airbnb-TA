@@ -56,15 +56,7 @@ router.post(
   }
 );
 
-router.get('/users/:userId', async (req, res) => {
-  try {
-    const user = await User.findByPk(req.params.userId);
-    if (!user) return res.status(404).json({ error: 'User not found' });
-    return res.json(user);
-  } catch (error) {
-    return res.status(400).json({ error: 'Error fetching user details' });
-  }
-});
+
 
 
 
