@@ -1,18 +1,17 @@
-const express = require('express')
+const express = require('express');
 const { Op } = require('sequelize');
 const bcrypt = require('bcryptjs');
 
 const { setTokenCookie, restoreUser } = require('../../utils/auth');
 const { User } = require('../../db/models');
 
-// backend/routes/api/session.js
-// ...
+// Validation imports
 const { check } = require('express-validator');
 const { handleValidationErrors } = require('../../utils/validation');
-// ...
 
 const router = express.Router();
 
+// Validation for login credentials
 const validateLogin = [
   check('credential')
     .exists({ checkFalsy: true })
@@ -21,9 +20,10 @@ const validateLogin = [
   check('password')
     .exists({ checkFalsy: true })
     .withMessage('Please provide a password.'),
-  handleValidationErrors
+  handleValidationErrors,
 ];
 
+// Login Route
 router.post(
   '/',
   validateLogin,
@@ -34,9 +34,9 @@ router.post(
       where: {
         [Op.or]: {
           username: credential,
-          email: credential
-        }
-      }
+          email: credential,
+        },
+      },
     });
 
     if (!user || !bcrypt.compareSync(password, user.hashedPassword.toString())) {
@@ -57,89 +57,32 @@ router.post(
 
     await setTokenCookie(res, safeUser);
 
-    return res.json({
-      user: safeUser
-    });
+    return res.json({ user: safeUser });
   }
 );
 
+// Logout Route
+router.delete('/', (_req, res) => {
+  res.clearCookie('token');
+  return res.json({ message: 'success' });
+});
 
+// Get Current User Route
+router.get('/', restoreUser, (req, res) => {
+  const { user } = req;
 
-router.delete(
-    '/',
-    (_req, res) => {
-      res.clearCookie('token');
-      return res.json({ message: 'success' });
-    }
-);
-
-
-router.get(
-  '/',
-  (req, res) => {
-    const { user } = req;
-    if (user) {
-      const safeUser = {
-        id: user.id,
-        email: user.email,
-        username: user.username,
-      };
-      return res.json({
-        user: safeUser
-      });
-    } else return res.json({ user: null });
+  if (user) {
+    const safeUser = {
+      id: user.id,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      email: user.email,
+      username: user.username,
+    };
+    return res.json({ user: safeUser });
+  } else {
+    return res.json({ user: null });
   }
-);
+});
 
 module.exports = router;
-
-/*
-
-fetch('/api/session', {
-  method: 'POST',
-  headers: {
-    "Content-Type": "application/json",
-    "XSRF-TOKEN": `w0sPzinp-CCLyCp3T6bImmDbedraAbDJL2x8`
-  },
-  body: JSON.stringify({ credential: 'demo@user.io', password: 'password' })
-}).then(res => res.json()).then(data => console.log(data));
-
-fetch('/api/session', {
-  method: 'POST',
-  headers: {
-    "Content-Type": "application/json",
-    "XSRF-TOKEN": `UKM44b2I-yXhE9YLcWwZt-_ESy9c0DDi9Yug`
-  },
-  body: JSON.stringify({ credential: 'Demo-lition', password: 'password' })
-}).then(res => res.json()).then(data => console.log(data));
-
-fetch('/api/session', {
-  method: 'POST',
-  headers: {
-    "Content-Type": "application/json",
-    "XSRF-TOKEN": `UKM44b2I-yXhE9YLcWwZt-_ESy9c0DDi9Yug`
-  },
-  body: JSON.stringify({ credential: 'Demo-lition', password: 'Hello World!' })
-}).then(res => res.json()).then(data => console.log(data));
-
-    fetch('/api/session', {
-    method: 'DELETE',
-    headers: {
-        "Content-Type": "application/json",
-        "XSRF-TOKEN": "UKM44b2I-yXhE9YLcWwZt-_ESy9c0DDi9Yug"
-    }
-    }).then(res => res.json()).then(data => console.log(data));
-
-
-
-    //!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    fetch('/api/session', {
-  method: 'POST',
-  headers: {
-    "Content-Type": "application/json",
-    "XSRF-TOKEN": `nDLo1TaU-adANopAjSI4_KzbaQlVars0DBGo`
-  },
-  body: JSON.stringify({ credential: '', password: 'password' })
-}).then(res => res.json()).then(data => console.log(data));
-
-*/
