@@ -2,7 +2,7 @@
 
 let options = {};
 if (process.env.NODE_ENV === "production") {
-  options.schema = process.env.SCHEMA; // Use custom schema in production
+  options.schema = process.env.SCHEMA; // Define your schema in the options object
 }
 
 module.exports = {
@@ -16,18 +16,50 @@ module.exports = {
           primaryKey: true,
           type: Sequelize.INTEGER,
         },
-        spotId: {
+        ownerId: {
           type: Sequelize.INTEGER,
           allowNull: false,
+          references: {
+            model: "Users",
+            key: "id",
+          },
+          onDelete: "CASCADE",
         },
-        url: {
+        address: {
           type: Sequelize.STRING,
           allowNull: false,
         },
-        preview: {
-          type: Sequelize.BOOLEAN,
+        city: {
+          type: Sequelize.STRING,
           allowNull: false,
-          defaultValue: false,
+        },
+        state: {
+          type: Sequelize.STRING,
+          allowNull: false,
+        },
+        country: {
+          type: Sequelize.STRING,
+          allowNull: false,
+        },
+        lat: {
+          type: Sequelize.DECIMAL,
+          allowNull: false,
+        },
+        lng: {
+          type: Sequelize.DECIMAL,
+          allowNull: false,
+        },
+        name: {
+          type: Sequelize.STRING,
+          allowNull: false,
+        },
+        description: {
+          type: Sequelize.STRING,
+          allowNull: false,
+        },
+        price: {
+          type: Sequelize.DECIMAL,
+          allowNull: false,
         },
         createdAt: {
           allowNull: false,
@@ -45,7 +77,7 @@ module.exports = {
   },
 
   async down(queryInterface, Sequelize) {
-    options.tableName = "SpotImages";
+    options.tableName = "Spots";
     return queryInterface.dropTable(options);
   },
 };
