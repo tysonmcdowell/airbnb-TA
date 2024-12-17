@@ -63,18 +63,18 @@ router.post(
 
 /*
 
-fetch('/api/users', {
-  method: 'POST',
-  headers: {
-    "Content-Type": "application/json",
-    "XSRF-TOKEN": "zj8s4XHT-fXKiTvB6CJW0hpF8igWyzN-er1w"
-  },
-  body: JSON.stringify({
-    email: 'spidey@spider.man',
-    username: 'Spidey',
-    password: 'password'
-  })
-}).then(res => res.json()).then(data => console.log(data));
+  fetch('/api/users', {
+    method: 'POST',
+    headers: {
+      "Content-Type": "application/json",
+      "XSRF-TOKEN": "zj8s4XHT-fXKiTvB6CJW0hpF8igWyzN-er1w"
+    },
+    body: JSON.stringify({
+      email: 'spidey@spider.man',
+      username: 'Spidey',
+      password: 'password'
+    })
+  }).then(res => res.json()).then(data => console.log(data));
 
 // !!!!!!!!!!!!
 
