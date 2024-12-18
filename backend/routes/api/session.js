@@ -44,8 +44,8 @@ router.post(
     if (!user || !bcrypt.compareSync(password, user.hashedPassword.toString())) {
       const err = new Error('Invalid credentials');  // Change this message
       err.status = 401;  // You might want to change this to 400 if it's a bad request error
-      err.title = 'Bad Request';  // Also make sure title matches
-      err.errors = { credential: 'The provided credentials were invalid.' };
+      err.title = 'Login failed';  // Also make sure title matches
+      err.errors = { message: 'Invalid credentials' };
       return next(err);  // This triggers the error handler
     }
 
