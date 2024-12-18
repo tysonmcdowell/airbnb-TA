@@ -41,23 +41,26 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
       },
       lat: {
-        type: DataTypes.DECIMAL,
+        type: DataTypes.DECIMAL(10, 6), // Adjusted precision
         allowNull: false,
       },
       lng: {
-        type: DataTypes.DECIMAL,
+        type: DataTypes.DECIMAL(10, 6), // Adjusted precision
         allowNull: false,
       },
       name: {
         type: DataTypes.STRING,
         allowNull: false,
+        validate: {
+          len: [1, 50], // Ensure name length is reasonable
+        },
       },
       description: {
         type: DataTypes.STRING,
         allowNull: false,
       },
       price: {
-        type: DataTypes.DECIMAL,
+        type: DataTypes.DECIMAL(10, 2), // Adjusted precision for prices
         allowNull: false,
       },
     },
