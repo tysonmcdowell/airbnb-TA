@@ -24,6 +24,8 @@ const validateLogin = [
   handleValidationErrors
 ];
 
+// POST log in a user
+
 router.post(
   '/',
   validateLogin,
@@ -63,7 +65,7 @@ router.post(
   }
 );
 
-
+// DELETE or logout a user
 
 router.delete(
     '/',
@@ -73,6 +75,7 @@ router.delete(
     }
 );
 
+// GET the current logged in user
 
 router.get(
   '/',

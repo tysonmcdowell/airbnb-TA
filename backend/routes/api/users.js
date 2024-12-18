@@ -31,14 +31,25 @@ const validateSignup = [
   handleValidationErrors
 ];
 
-// Sign up
+// POST sign up
+
 router.post(
   '/',
   validateSignup,
   async (req, res) => {
-    const { firstName, lastName ,email, password, username } = req.body;
+    const { firstName, lastName, email, password, username } = req.body;
+
+    // Hash the password
     const hashedPassword = bcrypt.hashSync(password);
-    const user = await User.create({ email, username, hashedPassword });
+
+    // Create user with hashedPassword
+    const user = await User.create({ 
+      firstName, 
+      lastName, 
+      email, 
+      username, 
+      hashedPassword // Use hashedPassword here instead of password
+    });
 
     const safeUser = {
       id: user.id,
@@ -55,6 +66,7 @@ router.post(
     });
   }
 );
+
 
 
 
