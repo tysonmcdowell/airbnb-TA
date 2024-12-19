@@ -229,7 +229,7 @@ router.post("/", requireAuth, validateSpotFields, handleValidationErrors, async 
       error.errors.forEach((e) => {
         errors[e.path] = e.message;
       });
-      return res.status(400).json({ message: "Validation error", errors });
+      return res.status(400).json({ message: "Validation error" });
     }
 
     return res.status(500).json({ message: "Internal Server Error" });
