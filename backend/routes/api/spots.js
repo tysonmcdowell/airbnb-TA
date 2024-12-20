@@ -328,4 +328,74 @@ router.delete("/:spotId", requireAuth, async (req, res) => {
   }
 });
 
+// Create a Review for a Spot based on the Spot's id
+router.post('/:spotId/reviews', requireAuth, async (req, res) => {
+    const { review, stars } = req.body;
+    const { spotId } = req.params;
+    const { user } = req;
+
+    const spot = await Spot.findByPk(spotId);
+    if (!spot) {
+        return res.status(404).json({
+            message: "Spot couldn't be found"
+        });
+    }
+
+    const existingReview = await Review.findOne({
+        where: { spotId, userId: user.id }
+    });
+
+    if (existingReview) {
+        return res.status(500).json({
+            message: "User already has a review for this spot"
+        });
+    }
+
+    if (!review || !stars || stars < 1 || stars > 5) {
+        return res.status(400).json({
+            message: "Bad Request",
+            errors: {
+                review: "Review text is required",
+                stars: "Stars must be an integer from 1 to 5"
+            }
+        });
+    }
+
+    const newReview = await Review.create({
+        userId: user.id,
+        spotId,
+        review,
+        stars
+    });
+
+    res.status(201).json(newReview);
+});
+// Get all Reviews by a Spot's id
+router.get('/spots/:spotId/reviews', async (req, res, next) => {
+    const { spotId } = req.params;
+
+    const spot = await Spot.findByPk(spotId);
+    if (!spot) {
+        return res.status(404).json({
+            message: "Spot couldn't be found"
+        });
+    }
+
+    const reviews = await Review.findAll({
+        where: { spotId },
+        include: [
+            {
+                model: User,
+                attributes: ['id', 'firstName', 'lastName']
+            },
+            {
+                model: ReviewImage,
+                attributes: ['id', 'url']
+            }
+        ]
+    });
+
+    res.json({ Reviews: reviews });
+});
+
 module.exports = router;
