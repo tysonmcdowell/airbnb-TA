@@ -2,7 +2,7 @@
 
 let options = {};
 if (process.env.NODE_ENV === 'production') {
-  options.schema = process.env.SCHEMA;
+  options.schema = process.env.SCHEMA; // Define your schema in production
 }
 
 module.exports = {
@@ -47,12 +47,12 @@ module.exports = {
           defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
         },
       },
-      options
+      options // Pass schema options here
     );
   },
 
   async down(queryInterface, Sequelize) {
-    options.tableName = 'Reviews';
+    options.tableName = 'Reviews'; // Specify tableName explicitly
     await queryInterface.dropTable(options);
   },
 };
