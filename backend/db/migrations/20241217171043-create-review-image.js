@@ -2,11 +2,16 @@
 
 let options = {};
 if (process.env.NODE_ENV === 'production') {
-  options.schema = process.env.SCHEMA;
+  options.schema = process.env.SCHEMA; // Set schema for production
 }
 
 module.exports = {
   async up(queryInterface, Sequelize) {
+    // Ensure the schema is created (useful for Render deployment)
+    if (process.env.NODE_ENV === 'production' && options.schema) {
+      await queryInterface.createSchema(options.schema);
+    }
+
     await queryInterface.createTable(
       'ReviewImages',
       {
@@ -19,7 +24,13 @@ module.exports = {
         reviewId: {
           type: Sequelize.INTEGER,
           allowNull: false,
-          references: { model: 'Reviews', key: 'id' },
+          references: { 
+            model: {
+              tableName: 'Reviews',
+              schema: options.schema, // Explicitly reference the schema
+            },
+            key: 'id',
+          },
           onDelete: 'CASCADE',
         },
         url: {
