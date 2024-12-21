@@ -67,20 +67,6 @@ module.exports = {
 
   async down(queryInterface, Sequelize) {
     options.tableName = 'Spots';
-    const Op = Sequelize.Op;
-  
-    // Delete the SpotImage records first (if any exist)
-    await queryInterface.bulkDelete('SpotImages', {
-      spotId: {
-        [Op.in]: [1, 2, 3] // Assuming you want to delete SpotImages related to the spots
-      }
-    });
-  
-    // Delete the Spot records after deleting SpotImages
-    await queryInterface.bulkDelete('Spots', {
-      name: {
-        [Op.in]: ['Modern Loft', 'Cozy Cottage', 'Luxury Condo']
-      }
-    });
-  }  
+    await queryInterface.dropTable(options);
+  },
 };
