@@ -9,7 +9,7 @@ if (process.env.NODE_ENV === 'production') {
 
 module.exports = {
   async up(queryInterface, Sequelize) {
-    const spots = [
+   const spots = [
       {
         ownerId: 1, // Matches Demo-lition
         address: '123 Main Street',
@@ -53,7 +53,6 @@ module.exports = {
         updatedAt: new Date(),
       },
     ];
-
     // Use Spot model's bulkCreate method for inserting data
     await Spot.bulkCreate(spots, { validate: true }); // Ensures input data meets model validations
   },
