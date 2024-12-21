@@ -1,5 +1,6 @@
 'use strict';
 
+
 const { Spot } = require('../models'); // Import the Spot model
 
 let options = {};
@@ -9,7 +10,7 @@ if (process.env.NODE_ENV === 'production') {
 
 module.exports = {
   async up(queryInterface, Sequelize) {
-   const spots = [
+    const spots = [
       {
         ownerId: 1, // Matches Demo-lition
         address: '123 Main Street',
