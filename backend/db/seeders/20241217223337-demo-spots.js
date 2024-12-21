@@ -1,72 +1,63 @@
+
+// ! THIS FILE IS DONE
+
 'use strict';
 
-const { Spot } = require('../models'); // Import the Spot model
+const { Spot } = require('../models');
+
 
 let options = {};
 if (process.env.NODE_ENV === 'production') {
-  options.schema = process.env.SCHEMA; // Attach schema in production
+  options.schema = process.env.SCHEMA;  // define your schema in options object
 }
 
 module.exports = {
-  async up(queryInterface, Sequelize) {
-    const spots = [
+  async up (queryInterface, Sequelize) {
+    await Spot.bulkCreate([
       {
-        ownerId: 1, // Matches Demo-lition
-        address: '123 Main Street',
-        city: 'Los Angeles',
-        state: 'CA',
+        ownerId: 1,
+        address: '123 main st',
+        city: 'nashville',
+        state: 'TN',
         country: 'USA',
-        lat: 34.0522,
-        lng: -118.2437,
-        name: 'Modern Loft',
-        description: 'A beautiful loft in downtown LA.',
-        price: 200.0,
-        createdAt: new Date(),
-        updatedAt: new Date(),
+        lat: 36.1627,
+        lng: 86.7816,
+        name: 'The Mansion',
+        description: 'waterfront home, 4 car garage, poolhouse, pool',
+        price: 5000000.00,
       },
       {
-        ownerId: 2, // Matches FakeUser1
-        address: '456 Elm Street',
-        city: 'San Francisco',
-        state: 'CA',
+        ownerId: 2,
+        address: '2343 E Raleigh Road',
+        city: 'Tampa',
+        state: 'FL',
         country: 'USA',
-        lat: 37.7749,
-        lng: -122.4194,
-        name: 'Cozy Cottage',
-        description: 'A quaint and cozy cottage.',
-        price: 150.0,
-        createdAt: new Date(),
-        updatedAt: new Date(),
+        lat: 78.0936,
+        lng: 12.7316,
+        name: 'The Beach',
+        description: 'surf, volleyball, fun',
+        price: 1000000.00,
       },
       {
-        ownerId: 3, // Matches FakeUser2
-        address: '789 Pine Avenue',
-        city: 'New York',
+        ownerId: 3,
+        address: '456 Elmo Ln',
+        city: 'New York City',
         state: 'NY',
         country: 'USA',
-        lat: 40.7128,
-        lng: -74.0060,
-        name: 'Luxury Condo',
-        description: 'A luxurious condo in NYC.',
-        price: 300.0,
-        createdAt: new Date(),
-        updatedAt: new Date(),
-      },
-    ];
-
-    // Use Spot model's bulkCreate method for inserting data
-    await Spot.bulkCreate(spots, { validate: true }); // Ensures input data meets model validations
+        lat: 59.4334,
+        lng: 90.7342,
+        name: 'The Town',
+        description: '0 car garage, pool',
+        price: 400000.00,
+      }
+    ], { validate: true });
   },
 
-  async down(queryInterface, Sequelize) {
+  async down (queryInterface, Sequelize) {
     options.tableName = 'Spots';
     const Op = Sequelize.Op;
-    return queryInterface.bulkDelete(
-      options,
-      {
-        name: { [Op.in]: ['Modern Loft', 'Cozy Cottage', 'Luxury Condo'] },
-      },
-      {}
-    );
-  },
+    return queryInterface.bulkDelete(options, {
+      state: { [Op.in]: ['NY', 'FL', 'TN'] }
+    }, {});
+  }
 };
