@@ -1,7 +1,6 @@
 'use strict';
 
-
-const { Spot } = require('../models'); // Import the Spot model
+const { Spot } = require('../models'); // Import Spot model
 
 let options = {};
 if (process.env.NODE_ENV === 'production') {
@@ -10,9 +9,10 @@ if (process.env.NODE_ENV === 'production') {
 
 module.exports = {
   async up(queryInterface, Sequelize) {
+    options.tableName = 'Spots';
     const spots = [
       {
-        ownerId: 1, // Matches Demo-lition
+        ownerId: 1,
         address: '123 Main Street',
         city: 'Los Angeles',
         state: 'CA',
@@ -26,7 +26,7 @@ module.exports = {
         updatedAt: new Date(),
       },
       {
-        ownerId: 2, // Matches FakeUser1
+        ownerId: 2,
         address: '456 Elm Street',
         city: 'San Francisco',
         state: 'CA',
@@ -40,7 +40,7 @@ module.exports = {
         updatedAt: new Date(),
       },
       {
-        ownerId: 3, // Matches FakeUser2
+        ownerId: 3,
         address: '789 Pine Avenue',
         city: 'New York',
         state: 'NY',
@@ -54,14 +54,13 @@ module.exports = {
         updatedAt: new Date(),
       },
     ];
-    // Use Spot model's bulkCreate method for inserting data
-    await Spot.bulkCreate(spots, { validate: true }); // Ensures input data meets model validations
+    await Spot.bulkCreate(spots, { validate: true });
   },
 
   async down(queryInterface, Sequelize) {
     options.tableName = 'Spots';
     const Op = Sequelize.Op;
-    return queryInterface.bulkDelete(
+    await queryInterface.bulkDelete(
       options,
       {
         name: { [Op.in]: ['Modern Loft', 'Cozy Cottage', 'Luxury Condo'] },
