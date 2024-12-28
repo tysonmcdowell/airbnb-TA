@@ -55,21 +55,21 @@ router.get('/current', requireAuth, async (req, res) => {
 for (const review of reviews) {
     if (review.Spot) {
         if (review.Spot.SpotImages && review.Spot.SpotImages.length > 0) {
-            review.Spot.dataValues.previewImage = review.Spot.SpotImages[0].url; // Add previewImage
+            review.Spot.dataValues.previewImage = review.Spot.SpotImages[0].url;
         } else {
-            review.Spot.dataValues.previewImage = null; // Handle case where previewImage is missing
+            review.Spot.dataValues.previewImage = null; 
         }
 
         // Ensure all necessary fields are in the Spot data
         const spot = review.Spot.dataValues;
-        if (!spot.lat) spot.lat = null;  // Add default values for missing fields
+        if (!spot.lat) spot.lat = null;  
         if (!spot.lng) spot.lng = null;
         if (!spot.name) spot.name = null;
         if (!spot.price) spot.price = null;
         if (!spot.state) spot.state = null;
         if (!spot.country) spot.country = null;
 
-        delete review.Spot.dataValues.SpotImages; // Clean up unnecessary data
+        delete review.Spot.dataValues.SpotImages; 
     }
 }
 res.json({ Reviews: reviews });
@@ -138,7 +138,7 @@ router.put('/:reviewId', requireAuth, requireReviewOwnership, async (req, res) =
 // Delete a Review
 router.delete('/:reviewId', requireAuth, async (req, res) => {
     const { reviewId } = req.params;
-    const { user } = req; // Assuming `user` is attached to `req` by the `requireAuth` middleware.
+    const { user } = req; 
 
     const review = await Review.findByPk(reviewId);
 
